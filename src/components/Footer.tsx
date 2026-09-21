@@ -1,6 +1,6 @@
 import { ArrowRight } from 'lucide-react'
 import { GYM, NAV, TRIAL, wa } from '../data'
-import { InstagramIcon } from '../ui'
+import { InstagramIcon, asset } from '../ui'
 
 export default function Footer() {
   return (
@@ -12,7 +12,7 @@ export default function Footer() {
         </div>
         <div className="foot__grid">
           <div>
-            <img src="/logo.png" alt="Be Strong The Gym" width="260" height="176" className="foot__logo" />
+            <img src={asset('logo.png')} alt="Be Strong The Gym" width="260" height="176" className="foot__logo" />
             <p>Muscle, cardio and nutrition under one roof in Red Hills, Hyderabad.</p>
           </div>
           <div>

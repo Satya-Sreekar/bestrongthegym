@@ -1,5 +1,5 @@
 import { GYM, IG } from '../data'
-import { InstagramIcon, Reveal } from '../ui'
+import { InstagramIcon, Reveal, asset } from '../ui'
 
 export default function Instagram() {
   return (
@@ -13,7 +13,7 @@ export default function Instagram() {
       <div className="ig__rail">
         {IG.map((n) => (
           <a key={n} className="ig__item" href={GYM.instagram} target="_blank" rel="noreferrer" aria-label="Open Be Strong on Instagram">
-            <img src={`/img/${n}.jpg`} alt="" width="360" height="640" loading="lazy" decoding="async" />
+            <img src={asset(`img/${n}.jpg`)} alt="" width="360" height="640" loading="lazy" decoding="async" />
           </a>
         ))}
       </div>

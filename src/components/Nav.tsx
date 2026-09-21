@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Menu, X, Phone } from 'lucide-react'
 import { GYM, NAV, TRIAL } from '../data'
-import { EASE, InstagramIcon } from '../ui'
+import { EASE, InstagramIcon, asset } from '../ui'
 
 export default function Nav() {
   const [open, setOpen] = useState(false)
@@ -17,7 +17,7 @@ export default function Nav() {
     <>
       <header className="nav">
         <div className="nav__pill">
-          <a href="#top" className="nav__logo" aria-label="Be Strong The Gym, back to top"><img src="/logo.png" alt="" width="260" height="176" /></a>
+          <a href="#top" className="nav__logo" aria-label="Be Strong The Gym, back to top"><img src={asset('logo.png')} alt="" width="260" height="176" /></a>
           <nav className="nav__links" aria-label="Primary">{NAV.map(([l, h]) => <a key={h} href={h}>{l}</a>)}</nav>
           <a className="btn btn--yellow btn--sm nav__cta" href={TRIAL}>Free trial</a>
           <button className="nav__burger" aria-expanded={open} aria-controls="sheet" onClick={() => setOpen((o) => !o)}>

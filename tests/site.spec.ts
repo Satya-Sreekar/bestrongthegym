@@ -62,6 +62,17 @@ test('all local images resolve', async ({ page }) => {
   expect(broken).toEqual([])
 })
 
+// Guards the subpath deploy: absolute "/..." asset URLs 404 when the site is
+// served from a project path like /bestrongthegym/ instead of a domain root.
+test('asset URLs are relative, not root-absolute', async ({ page }) => {
+  const absolute = await page.evaluate(() =>
+    [...document.querySelectorAll('img[src], script[src], link[href]')]
+      .map((el) => el.getAttribute('src') || el.getAttribute('href') || '')
+      .filter((u) => u.startsWith('/')),
+  )
+  expect(absolute).toEqual([])
+})
+
 test('mobile: bottom-sheet menu opens and navigates', async ({ page, isMobile }) => {
   test.skip(!isMobile, 'mobile only')
   await page.getByRole('button', { name: /open menu/i }).click()

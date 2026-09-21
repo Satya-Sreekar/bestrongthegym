@@ -40,8 +40,12 @@ export function openStatus() {
   return { open: false, text: `Opens ${day === 6 ? 'Monday' : 'tomorrow'} at 6 AM` }
 }
 
+// Assets resolve against the deploy base, so the site works at the domain root
+// and at a project subpath (e.g. /bestrongthegym/) without changing code.
+export const asset = (path: string) => import.meta.env.BASE_URL + path
+
 export const Photo = ({ name, alt = '', className, eager }: { name: string; alt?: string; className?: string; eager?: boolean }) => (
-  <img src={`/img/photo/${name}.webp`} alt={alt} className={className} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+  <img src={asset(`img/photo/${name}.webp`)} alt={alt} className={className} loading={eager ? 'eager' : 'lazy'} decoding="async" />
 )
 
 export const InstagramIcon = ({ size = 18 }: { size?: number }) => (

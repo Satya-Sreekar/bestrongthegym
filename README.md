@@ -1,6 +1,6 @@
 # Be Strong The Gym — bestrongthegym.com
 
-Single-page site for Be Strong The Gym, Red Hills, Hyderabad. React + Vite + Framer Motion, tested with Playwright, hosted on GitHub Pages behind Cloudflare DNS.
+Single-page site for Be Strong The Gym, Red Hills, Hyderabad. React + Vite + Framer Motion, tested with Playwright, hosted on GitHub Pages behind Cloudflare DNS. Light, warm design: paper background, yellow accent, Unbounded + Instrument Sans, colour photography.
 
 ## Develop
 
@@ -12,7 +12,7 @@ npm test           # Playwright: mobile (iPhone 13 viewport) + desktop (1440px)
 node tests/shots.mjs mobile   # viewport-sized screenshots into .playwright-mcp/shots (needs `npx vite preview` running)
 ```
 
-All copy, prices, hours and links live in `src/data.ts`. Photos live in `public/img/`.
+All copy, prices, hours and links live in `src/data.ts`. Gym photos live in `public/img/photo/` (WebP), Instagram reel covers in `public/img/`.
 
 ## Deploy
 
@@ -41,4 +41,4 @@ Recommended Cloudflare extras once proxied: Always Use HTTPS on, Auto Minify off
 
 ## Sources
 
-Photos from the gym's Google listing and Instagram (@bestrongthegym). Ratings and reviews as published on Google in September 2026.
+Photos are the gym's own, taken from its Google Business listing and Instagram (@bestrongthegym), in colour. Ratings and reviews as published on Google in September 2026.

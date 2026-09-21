@@ -1,21 +1,11 @@
 import { useEffect, useState } from 'react'
-import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
-import { Menu, X, Phone, Clock } from 'lucide-react'
-import { GYM, wa } from '../data'
+import { AnimatePresence, motion } from 'framer-motion'
+import { Menu, X, Phone } from 'lucide-react'
+import { GYM, NAV, TRIAL } from '../data'
 import { EASE, InstagramIcon } from '../ui'
-
-const LINKS: [string, string][] = [
-  ['About', '#about'], ['The floor', '#floor'], ['Programs', '#programs'], ['Coaches', '#coaches'],
-  ['Plans', '#plans'], ['Reviews', '#reviews'], ['Visit', '#visit'],
-]
-const TRIAL = wa("I'd like to book a free trial session. When can I come in?")
 
 export default function Nav() {
   const [open, setOpen] = useState(false)
-  const [solid, setSolid] = useState(false)
-  const { scrollY } = useScroll()
-  useMotionValueEvent(scrollY, 'change', (v) => setSolid(v > 40))
-
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
@@ -25,16 +15,12 @@ export default function Nav() {
 
   return (
     <>
-      <header className={`nav${solid || open ? ' is-solid' : ''}`}>
-        <div className="wrap nav__in">
-          <a href="#top" className="nav__logo" aria-label="Be Strong The Gym, back to top">
-            <img src="/logo.png" alt="" width="260" height="176" />
-          </a>
-          <nav className="nav__links" aria-label="Primary">
-            {LINKS.map(([label, href]) => <a key={href} href={href}>{label}</a>)}
-          </nav>
-          <a className="btn btn--sm nav__cta" href={TRIAL}>Book a free trial</a>
-          <button className="nav__burger" aria-expanded={open} aria-controls="menu" onClick={() => setOpen((o) => !o)}>
+      <header className="nav">
+        <div className="nav__pill">
+          <a href="#top" className="nav__logo" aria-label="Be Strong The Gym, back to top"><img src="/logo-dark.png" alt="" width="260" height="176" /></a>
+          <nav className="nav__links" aria-label="Primary">{NAV.map(([l, h]) => <a key={h} href={h}>{l}</a>)}</nav>
+          <a className="btn btn--yellow btn--sm nav__cta" href={TRIAL}>Free trial</a>
+          <button className="nav__burger" aria-expanded={open} aria-controls="sheet" onClick={() => setOpen((o) => !o)}>
             {open ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
             <span className="sr">{open ? 'Close menu' : 'Open menu'}</span>
           </button>
@@ -42,27 +28,24 @@ export default function Nav() {
       </header>
       <AnimatePresence>
         {open && (
-          <motion.div id="menu" className="menu" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.22 }}>
-            <nav className="menu__links" aria-label="Mobile">
-              {LINKS.map(([label, href], i) => (
-                <motion.a key={href} href={href} onClick={() => setOpen(false)}
-                  initial={{ y: 28, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ opacity: 0 }}
-                  transition={{ delay: 0.06 + i * 0.05, duration: 0.5, ease: EASE }}>
-                  <span className="menu__num">0{i + 1}</span>{label}
-                </motion.a>
-              ))}
-            </nav>
-            <motion.div className="menu__foot" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}>
-              <div className="menu__row">
-                <a href={GYM.tel}><Phone aria-hidden="true" />{GYM.phone}</a>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '.4rem' }}>
-                  <Clock aria-hidden="true" style={{ width: 16, height: 16, color: 'var(--gold)' }} />Mon–Sat · 6 AM–11 PM
-                </span>
-                <a href={GYM.instagram} target="_blank" rel="noreferrer"><InstagramIcon size={16} />@bestrongthegym</a>
+          <>
+            <motion.button className="sheet__scrim" aria-label="Close menu" onClick={() => setOpen(false)} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} />
+            <motion.div id="sheet" className="sheet" role="dialog" aria-label="Menu" initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }} transition={{ duration: 0.4, ease: EASE }}>
+              <span className="sheet__handle" aria-hidden="true" />
+              <nav className="sheet__links" aria-label="Mobile">
+                {NAV.map(([l, h], i) => (
+                  <motion.a key={h} href={h} onClick={() => setOpen(false)} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12 + i * 0.04, duration: 0.4, ease: EASE }}>{l}</motion.a>
+                ))}
+              </nav>
+              <div className="sheet__foot">
+                <a className="btn btn--yellow btn--block" href={TRIAL} onClick={() => setOpen(false)}>Book a free trial</a>
+                <div className="sheet__row">
+                  <a href={GYM.tel}><Phone aria-hidden="true" />{GYM.phone}</a>
+                  <a href={GYM.instagram} target="_blank" rel="noreferrer"><InstagramIcon size={16} />@bestrongthegym</a>
+                </div>
               </div>
-              <a className="btn btn--block" href={TRIAL} onClick={() => setOpen(false)}>Book a free trial</a>
             </motion.div>
-          </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>

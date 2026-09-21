@@ -1,19 +1,17 @@
 import Nav from './components/Nav'
 import Hero from './components/Hero'
-import Ticker from './components/Ticker'
-import Stats from './components/Stats'
-import About from './components/About'
-import Facilities from './components/Facilities'
-import Programs from './components/Programs'
-import Instagram from './components/Instagram'
-import Trainers from './components/Trainers'
+import PhotoMarquee from './components/PhotoMarquee'
+import Inside from './components/Inside'
+import FirstMonth from './components/FirstMonth'
+import Tracks from './components/Tracks'
+import Coaches from './components/Coaches'
 import Pricing from './components/Pricing'
-import Transformation from './components/Transformation'
-import Reviews from './components/Reviews'
-import FAQ from './components/FAQ'
+import Voices from './components/Voices'
+import Instagram from './components/Instagram'
 import Visit from './components/Visit'
+import FAQ from './components/FAQ'
 import Footer from './components/Footer'
-import MobileBar from './components/MobileBar'
+import WhatsAppFab from './components/WhatsAppFab'
 
 export default function App() {
   return (
@@ -22,22 +20,19 @@ export default function App() {
       <Nav />
       <main id="main">
         <Hero />
-        <Ticker />
-        <Stats />
-        <About />
-        <Facilities />
-        <Programs />
-        <Instagram />
-        <Trainers />
+        <PhotoMarquee />
+        <Inside />
+        <FirstMonth />
+        <Tracks />
+        <Coaches />
         <Pricing />
-        <Transformation />
-        <Reviews />
-        <FAQ />
+        <Voices />
+        <Instagram />
         <Visit />
+        <FAQ />
       </main>
       <Footer />
-      <MobileBar />
-      <div className="grain" aria-hidden="true" />
+      <WhatsAppFab />
     </>
   )
 }

@@ -1,56 +1,41 @@
 import { useState } from 'react'
-import { MapPin, Navigation, Phone, MessageCircle } from 'lucide-react'
+import { MapPin, Navigation, Phone } from 'lucide-react'
 import { GYM, wa } from '../data'
-import { Reveal, SectionHead } from '../ui'
+import { Heading, Photo, Reveal, openStatus } from '../ui'
 
-// ponytail: open/closed computed once on render from IST; no live ticking
-function status() {
-  const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }))
-  const day = now.getDay()
-  const h = now.getHours()
-  if (day === 0) return { open: false, text: 'Closed today · opens Monday 6 AM' }
-  if (h >= GYM.hours.open && h < GYM.hours.close) return { open: true, text: `Open now · closes ${GYM.hours.close - 12} PM` }
-  if (h < GYM.hours.open) return { open: false, text: 'Closed · opens 6 AM today' }
-  return { open: false, text: `Closed · opens 6 AM ${day === 6 ? 'Monday' : 'tomorrow'}` }
-}
+const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
 export default function Visit() {
   const [map, setMap] = useState(false)
-  const s = status()
+  const s = openStatus()
   return (
-    <section className="section section--alt" id="visit">
+    <section className="section" id="visit">
       <div className="wrap">
-        <SectionHead num="09" kicker="Visit" title={<>Find us on <em>Hilltop Road.</em></>} />
+        <Heading eyebrow="Visit" title="Come see it before you decide." text="Walk in any time we are open. Or message first and a coach will be waiting." />
         <div className="visit">
-          <Reveal>
-            <div className="visit__block">
-              <p className="visit__label">Address</p>
-              <address>{GYM.address.map((l) => <span key={l} style={{ display: 'block' }}>{l}</span>)}</address>
+          <Reveal className="visit__card">
+            <p className={`live${s.open ? ' is-open' : ''}`}><i aria-hidden="true" />{s.text}</p>
+            <address>{GYM.address.map((l) => <span key={l}>{l}</span>)}</address>
+            <div className="days" aria-label="Open Monday to Saturday, closed Sunday">
+              {DAYS.map((d) => <span key={d} className={d === 'Sun' ? 'is-off' : ''}>{d}</span>)}
             </div>
-            <div className="visit__block">
-              <p className="visit__label">Hours</p>
-              <div className="hours">
-                <div><span>Monday – Saturday</span><b>6 AM – 11 PM</b></div>
-                <div><span>Sunday</span><b>Closed</b></div>
-              </div>
-              <p className={`open${s.open ? '' : ' is-closed'}`}><i aria-hidden="true" />{s.text}</p>
-            </div>
+            <p className="visit__hours"><b>6 AM – 11 PM</b> Monday to Saturday · Sunday closed</p>
             <div className="visit__cta">
-              <a className="btn" href={GYM.directions} target="_blank" rel="noreferrer"><Navigation aria-hidden="true" /> Get directions</a>
+              <a className="btn btn--ink" href={GYM.directions} target="_blank" rel="noreferrer"><Navigation aria-hidden="true" /> Directions</a>
               <a className="btn btn--ghost" href={GYM.tel}><Phone aria-hidden="true" /> Call</a>
-              <a className="btn btn--ghost" href={wa("I'd like to book a trial session. When can I come in?")}><MessageCircle aria-hidden="true" /> WhatsApp</a>
+              <a className="btn btn--ghost" href={wa('I would like to visit the gym. When is a good time?')}>WhatsApp</a>
             </div>
           </Reveal>
           <Reveal delay={0.1} className="map">
             {map ? (
-              <iframe title="Map showing Be Strong The Gym on Hilltop Road, Red Hills" src={GYM.mapEmbed} loading="lazy" allowFullScreen referrerPolicy="no-referrer-when-downgrade" />
+              <iframe title="Map showing Be Strong The Gym on Hilltop Road" src={GYM.mapEmbed} loading="lazy" allowFullScreen referrerPolicy="no-referrer-when-downgrade" />
             ) : (
-              <div className="map__cover">
-                <div>
-                  <button className="btn btn--gold" onClick={() => setMap(true)}><MapPin aria-hidden="true" /> Show interactive map</button>
-                  <small style={{ marginTop: '.75rem' }}>The map loads from Google when you open it.</small>
+              <>
+                <Photo name="signboard" alt="The Be Strong The Gym signboard on Hilltop Road" />
+                <div className="map__cover">
+                  <button className="btn btn--yellow" onClick={() => setMap(true)}><MapPin aria-hidden="true" /> Show map</button>
                 </div>
-              </div>
+              </>
             )}
           </Reveal>
         </div>

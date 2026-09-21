@@ -1,64 +1,54 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Check, ArrowUpRight } from 'lucide-react'
-import { PLANS, TERMS, wa, type TermKey } from '../data'
-import { EASE, Reveal, SectionHead } from '../ui'
+import { ArrowUpRight, Check } from 'lucide-react'
+import { PLANS, TERMS, wa, type Term } from '../data'
+import { EASE, Heading, Reveal } from '../ui'
 
 const inr = (n: number) => '₹' + n.toLocaleString('en-IN')
 
 export default function Pricing() {
-  const [term, setTerm] = useState<TermKey>('m')
+  const [term, setTerm] = useState<Term>('m')
   const t = TERMS.find((x) => x.key === term)!
   return (
-    <section className="section section--alt" id="plans">
+    <section className="section" id="membership">
       <div className="wrap">
-        <SectionHead num="05" kicker="Membership" title={<>Pick your <em>commitment.</em></>}
-          lead="Straightforward pricing. Commit for longer and your monthly cost drops sharply." />
+        <Heading eyebrow="Membership" title="Pay for the gym, not the brand." text="Straight prices. Pay upfront for longer and the monthly cost falls fast." />
         <Reveal>
-          <div className="seg" role="group" aria-label="Membership length">
-            {TERMS.map((x) => (
-              <button key={x.key} aria-pressed={term === x.key} onClick={() => setTerm(x.key)}>
-                {term === x.key && <motion.span layoutId="seg-pill" className="seg__pill" transition={{ type: 'spring', stiffness: 400, damping: 34 }} />}
-                <span>{x.label}{x.off && <small>{x.off}</small>}</span>
-              </button>
-            ))}
+          <div className="chips chips--select" role="group" aria-label="Membership length">
+            {TERMS.map((x) => <button key={x.key} className="chip chip--btn" aria-pressed={term === x.key} onClick={() => setTerm(x.key)}>{x.label}</button>)}
           </div>
         </Reveal>
         <div className="plans">
           {PLANS.map((p, i) => {
             const price = p.prices ? p.prices[term] : null
-            const perMonth = price && t.months > 1 ? Math.round(price / t.months) : null
-            const label = p.prices ? `${p.name} plan (${t.label.toLowerCase()})` : 'personal training'
+            const perDay = price ? Math.round(price / (t.months * 30)) : null
             return (
               <Reveal key={p.name} delay={i * 0.08} className={`plan${p.popular ? ' plan--pop' : ''}`}>
-                <p className="plan__tag">{p.tag}</p>
+                {p.popular && <span className="sticker sticker--yellow plan__badge">Most members pick this</span>}
+                <p className="plan__note">{p.note}</p>
                 <h3>{p.name}</h3>
-                <p className="plan__desc">{p.desc}</p>
                 <div className="plan__price" aria-live="polite">
                   <AnimatePresence mode="wait" initial={false}>
-                    <motion.div key={term} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25, ease: EASE }}>
+                    <motion.div key={term} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.22, ease: EASE }}>
                       {!p.prices ? (
-                        <><span className="plan__amt">{p.range}</span><span className="plan__note">Depends on your goal and programme</span></>
+                        <><strong>{p.range}</strong><span>per month, depending on the programme</span></>
                       ) : price == null ? (
-                        <><span className="plan__amt plan__amt--sm">Ask for a quote</span><span className="plan__note">Message us for {t.label.toLowerCase()} pricing</span></>
+                        <><strong className="plan__ask">Ask us</strong><span>{t.label} pricing on request</span></>
                       ) : (
-                        <>
-                          <span className="plan__amt">{inr(price)}<small>{t.months === 1 ? '/ month' : `/ ${t.label}`}</small></span>
-                          <span className="plan__note">{perMonth ? `≈ ${inr(perMonth)} a month, billed upfront` : 'Billed monthly'}</span>
-                        </>
+                        <><strong>{inr(price)}</strong><span>for {t.label} · about {inr(perDay!)} a day</span></>
                       )}
                     </motion.div>
                   </AnimatePresence>
                 </div>
-                <ul>{p.features.map((f) => <li key={f}><Check aria-hidden="true" />{f}</li>)}</ul>
-                <a className={`btn${p.popular ? '' : ' btn--ghost'}`} href={wa(`I'm interested in the ${label}. Can you share details?`)}>
-                  {p.prices ? `Join ${p.name}` : 'Ask on WhatsApp'} <ArrowUpRight aria-hidden="true" />
+                <ul>{p.includes.map((f) => <li key={f}><Check aria-hidden="true" />{f}</li>)}</ul>
+                <a className={`btn ${p.popular ? 'btn--ink' : 'btn--ghost'}`} href={wa(p.prices ? `I want to join the ${p.name} plan for ${t.label}. What is the next step?` : 'I want to know more about personal training.')}>
+                  {p.prices ? 'Join on WhatsApp' : 'Ask about coaching'} <ArrowUpRight aria-hidden="true" />
                 </a>
               </Reveal>
             )
           })}
         </div>
-        <p className="plans__foot">Prices in INR, confirmed by the gym in September 2026. Visit or message us to join.</p>
+        <p className="fineprint">Prices in INR as of September 2026. Pay at the front desk when you join.</p>
       </div>
     </section>
   )

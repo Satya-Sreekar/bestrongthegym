@@ -1,42 +1,101 @@
-import { ArrowRight } from 'lucide-react'
-import { GYM, NAV, TRIAL, wa } from '../data'
-import { InstagramIcon, asset } from '../ui'
+import { BUSINESS, LINKS } from '../config'
+import { NAV } from '../content'
+import { track } from '../track'
+import { InstagramIcon, WhatsAppCta, WhatsAppIcon, asset } from '../ui'
 
 export default function Footer() {
+  const { address, hours } = BUSINESS
+
   return (
-    <footer className="foot">
+    <footer className="footer">
       <div className="wrap">
-        <div className="foot__cta">
-          <h2>Your first session is free.<br />The rest is up to you.</h2>
-          <a className="btn btn--yellow" href={TRIAL}>Book it on WhatsApp <ArrowRight aria-hidden="true" /></a>
+        <div className="footer__cta">
+          <h2>
+            Stronger every day.
+            <br />
+            <span className="accent">Start this week.</span>
+          </h2>
+          <WhatsAppCta message="membership" event="whatsapp_membership_click" detail="footer" className="btn btn--brand btn--lg">
+            <WhatsAppIcon /> Get membership pricing
+          </WhatsAppCta>
         </div>
-        <div className="foot__grid">
+
+        <div className="footer__grid">
           <div>
-            <img src={asset('logo.png')} alt="Be Strong The Gym" width="260" height="176" className="foot__logo" />
-            <p>Muscle, cardio and nutrition under one roof in Red Hills, Hyderabad.</p>
+            <img src={asset('logo.png')} alt={BUSINESS.name} width="260" height="176" className="footer__logo" />
+            <p>{BUSINESS.tagline}</p>
+            <p className="footer__muted">A full gym in Red Hills, Lakdikapul, Hyderabad.</p>
           </div>
+
           <div>
-            <h4>Find us</h4>
-            <p>{GYM.address.map((l) => <span key={l} style={{ display: 'block' }}>{l}</span>)}</p>
-            <p>Mon–Sat 6 AM–11 PM<br />Sunday closed</p>
+            <h3>Visit</h3>
+            <address>
+              <span>{address.line1}</span>
+              <span>{address.line2}</span>
+              <span>
+                {address.city} – {address.postcode}
+              </span>
+            </address>
+            <p className="footer__muted">
+              {hours.daysLabel}
+              <br />
+              {hours.openLabel} – {hours.closeLabel}
+              <br />
+              {hours.closedNote}
+            </p>
           </div>
+
           <div>
-            <h4>Talk to us</h4>
+            <h3>Contact</h3>
             <ul>
-              <li><a href={GYM.tel}>{GYM.phone}</a></li>
-              <li><a href={wa('I have a question.')}>WhatsApp</a></li>
-              <li><a href={`mailto:${GYM.email}`}>{GYM.email}</a></li>
-              <li><a href={GYM.instagram} target="_blank" rel="noreferrer"><InstagramIcon size={14} /> @bestrongthegym</a></li>
+              <li>
+                <a href={BUSINESS.phoneHref} onClick={() => track('phone_click', 'footer')}>
+                  {BUSINESS.phoneDisplay}
+                </a>
+              </li>
+              <li>
+                <WhatsAppCta message="general" event="whatsapp_general_click" detail="footer" className="footer__link">
+                  WhatsApp
+                </WhatsAppCta>
+              </li>
+              <li>
+                <a href={`mailto:${BUSINESS.email}`}>{BUSINESS.email}</a>
+              </li>
+              <li>
+                <a
+                  href={LINKS.instagram}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => track('instagram_click', 'footer')}
+                >
+                  <InstagramIcon size={14} /> @bestrongthegym
+                </a>
+              </li>
             </ul>
           </div>
+
           <div>
-            <h4>Sections</h4>
-            <ul>{NAV.map(([l, h]) => <li key={h}><a href={h}>{l}</a></li>)}<li><a href="#faq">Questions</a></li></ul>
+            <h3>Sections</h3>
+            <ul>
+              {NAV.map((item) => (
+                <li key={item.href}>
+                  <a href={item.href}>{item.label}</a>
+                </li>
+              ))}
+              <li>
+                <a href="#membership">Membership</a>
+              </li>
+              <li>
+                <a href="#faq">Questions</a>
+              </li>
+            </ul>
           </div>
         </div>
-        <p className="foot__wordmark" aria-hidden="true">Be Strong</p>
-        <div className="foot__bottom">
-          <span>© {new Date().getFullYear()} Be Strong The Gym</span>
+
+        <div className="footer__bottom">
+          <span>
+            © {new Date().getFullYear()} {BUSINESS.name}
+          </span>
           <a href="#top">Back to top</a>
         </div>
       </div>
